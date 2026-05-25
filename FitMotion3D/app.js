@@ -15,10 +15,70 @@ const app = {
         }
     },
 
+    workouts: [
+        {
+            id: 'squats',
+            name: 'Barbell Squats',
+            title: 'Leg Day',
+            categories: ['Muscle Gain'],
+            target: 'Quads, Glutes',
+            sets: '3',
+            reps: '12',
+            time: 60,
+            icon: 'fitness_center',
+            modelSrc: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb',
+            videoSrc: null,
+            animationName: 'Running'
+        },
+        {
+            id: 'pushups',
+            name: 'Push Ups',
+            title: 'Chest Day',
+            categories: ['Muscle Gain', 'Weight Loss', 'HIIT'],
+            target: 'Chest, Triceps',
+            sets: '4',
+            reps: '15',
+            time: 45,
+            icon: 'sports_gymnastics',
+            modelSrc: null,
+            videoSrc: 'assets/videos/pushups.mp4',
+            animationName: null
+        },
+        {
+            id: 'dhanuasana',
+            name: 'Dhanuasana',
+            title: 'Yoga Session',
+            categories: ['Yoga'],
+            target: 'Spine, Chest, Core',
+            sets: '3',
+            reps: 'Hold 20s',
+            time: 60,
+            icon: 'self_improvement',
+            modelSrc: null,
+            videoSrc: 'assets/videos/dhanuasana.mov',
+            animationName: null
+        },
+        {
+            id: 'mayurasana',
+            name: 'Mayurasana',
+            title: 'Yoga Session',
+            categories: ['Yoga'],
+            target: 'Wrists, Core, Balance',
+            sets: '3',
+            reps: 'Hold 15s',
+            time: 45,
+            icon: 'self_improvement',
+            modelSrc: null,
+            videoSrc: 'assets/videos/mayurasana.mov',
+            animationName: null
+        }
+    ],
+
     init() {
         this.cacheDOM();
         this.bindEvents();
         this.checkAuth();
+        this.renderWorkouts('All');
     },
 
     cacheDOM() {
@@ -127,6 +187,17 @@ const app = {
                 }
             });
         }
+
+        // Category Pills Filtering
+        const categoryPills = document.querySelectorAll('.category-pill');
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', (e) => {
+                categoryPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                const category = pill.textContent.trim();
+                this.renderWorkouts(category);
+            });
+        });
     },
 
     checkAuth() {
@@ -190,51 +261,55 @@ const app = {
     },
 
     openWorkout(workoutId) {
-        let title, exerciseName, time, animationName, modelSrc, videoSrc;
+        let workout = this.workouts.find(w => w.id === workoutId);
         
-        if (workoutId === 'squats') {
-            title = 'Leg Day';
-            exerciseName = 'Barbell Squats';
-            time = 60; // 60 seconds
-            animationName = 'Running'; // Proxy animation for squats model
-            modelSrc = 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb';
-            videoSrc = null;
-        } else if (workoutId === 'pushups') {
-            title = 'Chest Day';
-            exerciseName = 'Push Ups';
-            time = 45;
-            modelSrc = null;
-            videoSrc = 'assets/videos/pushups.mp4';
-        } else {
-            title = 'Full Body Blast';
-            exerciseName = 'Custom Exercise';
-            time = 30;
-            animationName = 'Idle';
-            modelSrc = 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb';
-            videoSrc = null;
+        if (!workout) {
+            // Fallback for custom or recommended workout
+            workout = {
+                id: 'custom',
+                name: 'Custom Exercise',
+                title: 'Full Body Blast',
+                target: 'Full Body',
+                sets: '3',
+                reps: '15',
+                time: 30,
+                modelSrc: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb',
+                videoSrc: null,
+                animationName: 'Idle'
+            };
         }
 
-        document.getElementById('training-title').textContent = title;
-        document.getElementById('current-exercise-name').textContent = exerciseName;
+        document.getElementById('training-title').textContent = workout.title;
+        document.getElementById('current-exercise-name').textContent = workout.name;
+
+        // Update target, sets, reps dynamically
+        const targetEl = document.querySelector('.target-muscle');
+        if (targetEl) targetEl.textContent = `Target: ${workout.target}`;
+        
+        const setEl = document.getElementById('current-set');
+        if (setEl) setEl.textContent = `1/${workout.sets}`;
+        
+        const repsEl = document.getElementById('current-reps');
+        if (repsEl) repsEl.textContent = workout.reps;
         
         // Reset timer
-        this.state.workout.timeRemaining = time;
+        this.state.workout.timeRemaining = workout.time;
         this.updateTimerDisplay();
         
         // Set Model or Video
-        if (videoSrc) {
+        if (workout.videoSrc) {
             if(this.modelViewer) this.modelViewer.style.display = 'none';
             if(this.modelTips) this.modelTips.style.display = 'none';
             if(this.videoViewer) {
-                this.videoViewer.src = videoSrc;
+                this.videoViewer.src = workout.videoSrc;
                 this.videoViewer.style.display = 'block';
                 this.videoViewer.play();
             }
         } else {
             if(this.videoViewer) this.videoViewer.style.display = 'none';
             if(this.modelViewer) {
-                this.modelViewer.src = modelSrc;
-                this.modelViewer.animationName = animationName;
+                this.modelViewer.src = workout.modelSrc;
+                this.modelViewer.animationName = workout.animationName || 'Idle';
                 this.modelViewer.style.display = 'block';
                 this.modelViewer.play();
             }
@@ -246,6 +321,36 @@ const app = {
         this.startTimer();
         
         this.switchScreen('training');
+    },
+
+    renderWorkouts(category = 'All') {
+        const workoutListContainer = document.querySelector('.workout-list');
+        if (!workoutListContainer) return;
+        
+        workoutListContainer.innerHTML = '';
+        
+        const filteredWorkouts = this.workouts.filter(workout => 
+            category === 'All' || workout.categories.includes(category)
+        );
+        
+        filteredWorkouts.forEach(workout => {
+            const workoutItem = document.createElement('div');
+            workoutItem.className = 'workout-item glass-card';
+            workoutItem.onclick = () => this.openWorkout(workout.id);
+            
+            workoutItem.innerHTML = `
+                <div class="workout-icon">
+                    <span class="material-icons-round">${workout.icon || 'fitness_center'}</span>
+                </div>
+                <div class="workout-details">
+                    <h4>${workout.name}</h4>
+                    <p>${workout.target} • ${workout.sets} Sets x ${workout.reps}</p>
+                </div>
+                <span class="material-icons-round chevron">chevron_right</span>
+            `;
+            
+            workoutListContainer.appendChild(workoutItem);
+        });
     },
 
     toggleWorkoutPlay() {
