@@ -5,7 +5,9 @@ const app = {
             age: '',
             height: '',
             weight: '',
-            goal: ''
+            goal: '',
+            healthCondition: 'none',
+            dietaryPreference: 'non-veg'
         },
         workout: {
             caloriesBurned: 0,
@@ -74,6 +76,164 @@ const app = {
         }
     ],
 
+    dietDatabase: {
+        none: {
+            strategy: "A standard balanced diet designed to optimize energy levels, support metabolic function, and improve body composition.",
+            emphasize: [
+                "Lean proteins (chicken, turkey, tofu, fish)",
+                "Fresh fruits and vegetables",
+                "Whole grains (brown rice, oats, quinoa)",
+                "Healthy fats (avocados, olive oil)"
+            ],
+            avoid: [
+                "Refined sugars & carbonated drinks",
+                "Deep-fried & processed junk foods",
+                "Excessive sodium & fast food",
+                "Highly refined carbohydrates"
+            ],
+            breakfast: "Greek yogurt bowl with mixed berries, a drizzle of honey, and sliced almonds.",
+            lunch: "Turkey and spinach wrap with whole wheat tortilla, cucumber, and hummus.",
+            snack: "A handful of mixed nuts (almonds, walnuts) and a banana.",
+            dinner: "Grilled salmon with a side of steamed broccoli and sweet potato.",
+            hydration: "Drink at least 2.5 - 3 liters of water daily. Hydration keeps energy levels high and aids digestion.",
+            generalTip: "Ensure a balance of macronutrients (protein, carbs, fats) in every meal to keep energy levels stable.",
+            veg: {
+                lunch: "Hummus and roasted vegetable wrap (bell peppers, zucchini, spinach) in a whole wheat tortilla.",
+                dinner: "Grilled tofu steak with a side of steamed broccoli and sweet potato.",
+                emphasize: [
+                    "Plant-based proteins (tofu, tempeh, lentils, beans, edamame)",
+                    "Fresh fruits and vegetables",
+                    "Whole grains (brown rice, oats, quinoa)",
+                    "Healthy fats (avocados, olive oil)"
+                ]
+            }
+        },
+        diabetes: {
+            strategy: "Focused on low-glycemic index foods and fiber-rich complex carbohydrates to maintain stable blood glucose levels while optimizing insulin sensitivity.",
+            emphasize: [
+                "Non-starchy vegetables (spinach, broccoli, cauliflower)",
+                "High-fiber complex carbs (lentils, chickpeas, quinoa)",
+                "Lean proteins to stabilize sugars (chicken, fish, eggs)",
+                "Healthy fats (walnuts, chia seeds, extra virgin olive oil)"
+            ],
+            avoid: [
+                "Refined carbohydrates (white bread, white rice, pasta)",
+                "Added sugars, sweets, and high-fructose syrups",
+                "Fruit juices and sugary energy drinks",
+                "Trans fats and heavily processed packaged snacks"
+            ],
+            breakfast: "Scrambled eggs with spinach, tomatoes, and half an avocado.",
+            lunch: "Quinoa salad with grilled chicken breast, cucumbers, bell peppers, and olive oil dressing.",
+            snack: "Celery sticks with all-natural peanut butter.",
+            dinner: "Baked cod filet with roasted asparagus and a side of cauliflower mash.",
+            hydration: "Drink at least 3 liters of water daily. Proper hydration helps the kidneys flush out excess glucose.",
+            generalTip: "Space meals evenly throughout the day and avoid skipping meals to prevent blood sugar spikes and crashes.",
+            veg: {
+                breakfast: "Scrambled tofu with spinach, mushrooms, tomatoes, and half an avocado.",
+                lunch: "Quinoa salad with roasted chickpeas, cucumbers, bell peppers, crumbled feta, and olive oil dressing.",
+                dinner: "Baked tempeh cutlets with roasted asparagus and a side of cauliflower mash.",
+                emphasize: [
+                    "Non-starchy vegetables (spinach, broccoli, cauliflower)",
+                    "High-fiber complex carbs (lentils, chickpeas, quinoa)",
+                    "Plant-based proteins to stabilize sugars (tofu, tempeh, edamame)",
+                    "Healthy fats (walnuts, chia seeds, extra virgin olive oil)"
+                ]
+            }
+        },
+        hypertension: {
+            strategy: "Emphasizes the DASH (Dietary Approaches to Stop Hypertension) diet principles: high potassium, magnesium, and calcium, while restricting sodium to manage blood pressure.",
+            emphasize: [
+                "Leafy greens & celery (helps relax blood vessels)",
+                "Potassium-rich foods (bananas, sweet potatoes, spinach)",
+                "Whole grains and unsalted seeds/nuts",
+                "Lean fish rich in Omega-3 fatty acids (salmon, mackerel)"
+            ],
+            avoid: [
+                "Canned soups, processed meats & pickles (extremely high sodium)",
+                "Table salt and salty seasoning mixes",
+                "Processed cheeses and frozen pre-packaged meals",
+                "Excessive caffeine and alcohol"
+            ],
+            breakfast: "Oatmeal topped with fresh sliced banana, blueberries, and ground flaxseeds.",
+            lunch: "Lentil soup served with a fresh garden salad dressed in lemon juice and olive oil.",
+            snack: "Unsalted pumpkin seeds and an orange.",
+            dinner: "Grilled chicken breast with roasted Brussels sprouts and brown rice.",
+            hydration: "Maintain steady fluid intake of 2.5 - 3 liters of water. Limit high-sodium sports drinks.",
+            generalTip: "Use herbs, spices, garlic, and citrus juices to flavor foods instead of adding table salt.",
+            veg: {
+                dinner: "Stir-fried tofu with roasted Brussels sprouts and brown rice.",
+                emphasize: [
+                    "Leafy greens & celery (helps relax blood vessels)",
+                    "Potassium-rich foods (bananas, sweet potatoes, spinach)",
+                    "Whole grains and unsalted seeds/nuts",
+                    "Omega-3 rich plant sources (chia seeds, walnuts, flaxseeds)"
+                ]
+            }
+        },
+        'gluten-free': {
+            strategy: "Strict elimination of gluten (wheat, barley, rye) with a focus on naturally gluten-free whole foods to prevent gut inflammation and support nutrient absorption.",
+            emphasize: [
+                "Naturally gluten-free grains (quinoa, wild rice, buckwheat)",
+                "Fresh lean meats, poultry, and wild-caught seafood",
+                "All fresh fruits and vegetables",
+                "Gut-soothing foods (bone broth, fermented foods, ginger)"
+            ],
+            avoid: [
+                "Traditional wheat products (pasta, bread, cereals, flour)",
+                "Processed foods with hidden gluten (soy sauce, beer, malt)",
+                "Processed gluten-free breads (often high in sugar/binders)",
+                "Fried foods with wheat-based batter"
+            ],
+            breakfast: "Chia seed pudding made with coconut milk, topped with raspberries and pumpkin seeds.",
+            lunch: "Tuna salad salad cups using large romaine lettuce leaves, cucumbers, and olive oil.",
+            snack: "Sliced apples with almond butter.",
+            dinner: "Pan-seared chicken breast with roasted carrots and baked sweet potato.",
+            hydration: "Drink 2.5 - 3 liters of water daily. Herbal teas like peppermint or ginger can help soothe digestion.",
+            generalTip: "Always read labels carefully; gluten is frequently used as a thickener or stabilizer in sauces and dressings.",
+            veg: {
+                lunch: "Chickpea and avocado salad cups using large romaine lettuce leaves and cucumbers.",
+                dinner: "Pan-seared tofu cubes with roasted carrots and baked sweet potato.",
+                emphasize: [
+                    "Naturally gluten-free grains (quinoa, wild rice, buckwheat)",
+                    "Fresh plant proteins (tofu, beans, lentils, peas)",
+                    "All fresh fruits and vegetables",
+                    "Gut-soothing foods (bone broth, fermented foods, ginger)"
+                ]
+            }
+        },
+        'high-cholesterol': {
+            strategy: "Focused on reducing saturated and trans fats, while emphasizing soluble fiber and plant sterols which actively bind to and lower LDL cholesterol.",
+            emphasize: [
+                "Foods high in soluble fiber (oats, barley, beans, lentils)",
+                "Omega-3 rich fatty fish (salmon, tuna)",
+                "Healthy fats containing sterols (avocados, almonds, olive oil)",
+                "Soy products (edamame, tofu)"
+            ],
+            avoid: [
+                "Saturated fats (butter, lard, high-fat red meats, cheese)",
+                "Trans fats (partially hydrogenated oils, commercial baked goods)",
+                "Processed meats (sausages, bacon)",
+                "Palm and coconut oil"
+            ],
+            breakfast: "Oat bran porridge topped with walnuts and a handful of strawberries.",
+            lunch: "Black bean and corn salad with grilled salmon, avocado, and lime-cilantro dressing.",
+            snack: "A cup of edamame with a pinch of sea salt.",
+            dinner: "Stir-fried tofu with broccoli, bell peppers, carrots, and sesame oil served over quinoa.",
+            hydration: "Drink 2.5 - 3 liters of water daily. Green tea is rich in antioxidants that support arterial health.",
+            generalTip: "Opt for grilling, baking, or steaming instead of frying to minimize dietary fat intake.",
+            veg: {
+                lunch: "Black bean and corn salad with grilled tofu, avocado, and lime-cilantro dressing.",
+                dinner: "Stir-fried tempeh with broccoli, bell peppers, carrots, and sesame oil served over quinoa.",
+                emphasize: [
+                    "Foods high in soluble fiber (oats, barley, beans, lentils)",
+                    "Omega-3 rich plant sources (flaxseeds, walnuts, chia seeds)",
+                    "Healthy fats containing sterols (avocados, almonds, olive oil)",
+                    "Soy products (edamame, tofu)"
+                ]
+            }
+        }
+    },
+
     init() {
         this.cacheDOM();
         this.bindEvents();
@@ -88,7 +248,8 @@ const app = {
             home: document.getElementById('screen-home'),
             training: document.getElementById('screen-training'),
             stats: document.getElementById('screen-stats'),
-            profile: document.getElementById('screen-profile')
+            profile: document.getElementById('screen-profile'),
+            diet: document.getElementById('screen-diet')
         };
         this.mainBottomNav = document.getElementById('main-bottom-nav');
         
@@ -97,6 +258,8 @@ const app = {
         this.profileHeight = document.getElementById('profile-height');
         this.profileWeight = document.getElementById('profile-weight');
         this.profileGoal = document.getElementById('profile-goal');
+        this.profileHealth = document.getElementById('profile-health');
+        this.profileDietary = document.getElementById('profile-dietary');
         this.btnSaveProfile = document.getElementById('btn-save-profile');
         this.themeToggle = document.getElementById('theme-toggle');
 
@@ -110,6 +273,8 @@ const app = {
         this.setupHeight = document.getElementById('setup-height');
         this.setupWeight = document.getElementById('setup-weight');
         this.setupGoal = document.getElementById('setup-goal');
+        this.setupHealth = document.getElementById('setup-health');
+        this.setupDietary = document.getElementById('setup-dietary');
         this.btnFinishSetup = document.getElementById('btn-finish-setup');
 
         // Home
@@ -145,6 +310,8 @@ const app = {
                 this.state.user.height = this.setupHeight.value;
                 this.state.user.weight = this.setupWeight.value;
                 this.state.user.goal = this.setupGoal.value;
+                this.state.user.healthCondition = this.setupHealth.value;
+                this.state.user.dietaryPreference = this.setupDietary.value;
                 
                 // Save to local storage
                 localStorage.setItem('fitmotion_user', JSON.stringify(this.state.user));
@@ -170,6 +337,8 @@ const app = {
                 this.state.user.height = this.profileHeight.value;
                 this.state.user.weight = this.profileWeight.value;
                 this.state.user.goal = this.profileGoal.value;
+                this.state.user.healthCondition = this.profileHealth.value;
+                this.state.user.dietaryPreference = this.profileDietary.value;
                 localStorage.setItem('fitmotion_user', JSON.stringify(this.state.user));
                 this.updateHomeUI();
                 alert('Profile saved!');
@@ -226,7 +395,7 @@ const app = {
         }
         
         // Show/hide bottom nav based on screen
-        if (['home', 'stats', 'profile'].includes(screenName)) {
+        if (['home', 'diet', 'stats', 'profile'].includes(screenName)) {
             if(this.mainBottomNav) this.mainBottomNav.style.display = 'flex';
         } else {
             if(this.mainBottomNav) this.mainBottomNav.style.display = 'none';
@@ -251,6 +420,9 @@ const app = {
         if (activeItem) activeItem.classList.add('active');
         
         this.switchScreen(tab);
+        if (tab === 'diet') {
+            this.updateDietUI();
+        }
         if (tab === 'stats') {
             this.initChart();
             this.updateStatsUI();
@@ -420,6 +592,117 @@ const app = {
         if(this.profileHeight) this.profileHeight.value = this.state.user.height || '';
         if(this.profileWeight) this.profileWeight.value = this.state.user.weight || '';
         if(this.profileGoal) this.profileGoal.value = this.state.user.goal || 'weight-loss';
+        if(this.profileHealth) this.profileHealth.value = this.state.user.healthCondition || 'none';
+        if(this.profileDietary) this.profileDietary.value = this.state.user.dietaryPreference || 'non-veg';
+    },
+
+    updateDietUI() {
+        const condition = this.state.user.healthCondition || 'none';
+        const goal = this.state.user.goal || 'weight-loss';
+        const dietary = this.state.user.dietaryPreference || 'non-veg';
+        
+        const details = this.dietDatabase[condition] || this.dietDatabase['none'];
+        
+        const conditionLabelMap = {
+            'none': 'None / General Health',
+            'diabetes': 'Diabetes Management',
+            'hypertension': 'Hypertension / Heart Health',
+            'gluten-free': 'Gluten-Free & Gut Health',
+            'high-cholesterol': 'Cholesterol Control'
+        };
+        
+        const goalLabelMap = {
+            'weight-loss': 'Weight Loss',
+            'muscle-gain': 'Muscle Gain',
+            'endurance': 'Endurance',
+            'flexibility': 'Flexibility'
+        };
+
+        const dietaryLabelMap = {
+            'non-veg': 'Non-Vegetarian',
+            'veg': 'Vegetarian'
+        };
+
+        document.getElementById('diet-active-condition').textContent = conditionLabelMap[condition];
+        document.getElementById('diet-active-goal').textContent = `Goal: ${goalLabelMap[goal]} • ${dietaryLabelMap[dietary]}`;
+
+        let strategy = details.strategy;
+        if (goal === 'weight-loss') {
+            strategy += " Portion control, calorie deficit, and fiber intake are prioritized to assist with body fat reduction.";
+        } else if (goal === 'muscle-gain') {
+            strategy += " Caloric surplus and high-quality protein building blocks are emphasized to support muscle hypertrophy and repair.";
+        } else if (goal === 'endurance') {
+            strategy += " Glycogen replenishment via clean complex carbohydrates is highlighted to sustain prolonged athletic performance.";
+        } else if (goal === 'flexibility') {
+            strategy += " Joint-lubricating healthy fats and micronutrient-dense anti-inflammatory foods are highlighted to support recovery and elasticity.";
+        }
+        document.getElementById('diet-strategy-text').textContent = strategy;
+
+        let baseCalories = { breakfast: 350, lunch: 480, snack: 160, dinner: 520 };
+        let baseProtein = { breakfast: 15, lunch: 30, snack: 5, dinner: 35 };
+
+        let calMult = 1.0;
+        let protMult = 1.0;
+
+        if (goal === 'weight-loss') {
+            calMult = 0.85;
+            protMult = 1.1;
+        } else if (goal === 'muscle-gain') {
+            calMult = 1.25;
+            protMult = 1.35;
+        } else if (goal === 'endurance') {
+            calMult = 1.15;
+            protMult = 1.05;
+        } else if (goal === 'flexibility') {
+            calMult = 0.95;
+            protMult = 1.0;
+        }
+
+        let breakfast = details.breakfast;
+        let lunch = details.lunch;
+        let snack = details.snack;
+        let dinner = details.dinner;
+        let emphasize = [...details.emphasize];
+
+        if (dietary === 'veg' && details.veg) {
+            if (details.veg.breakfast) breakfast = details.veg.breakfast;
+            if (details.veg.lunch) lunch = details.veg.lunch;
+            if (details.veg.snack) snack = details.veg.snack;
+            if (details.veg.dinner) dinner = details.veg.dinner;
+            if (details.veg.emphasize) emphasize = [...details.veg.emphasize];
+        }
+
+        const mealsMap = { breakfast, lunch, snack, dinner };
+
+        const meals = ['breakfast', 'lunch', 'snack', 'dinner'];
+        meals.forEach(meal => {
+            const calVal = Math.round(baseCalories[meal] * calMult);
+            const protVal = Math.round(baseProtein[meal] * protMult);
+            
+            document.getElementById(`diet-${meal}-desc`).textContent = mealsMap[meal];
+            document.getElementById(`diet-${meal}-macros`).textContent = `${calVal} kcal • ${protVal}g Protein`;
+        });
+
+        const emphasizeList = document.getElementById('diet-emphasize-list');
+        const avoidList = document.getElementById('diet-avoid-list');
+
+        emphasizeList.innerHTML = '';
+        avoidList.innerHTML = '';
+
+        emphasize.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            emphasizeList.appendChild(li);
+        });
+
+        details.avoid.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            avoidList.appendChild(li);
+        });
+
+        document.getElementById('diet-hydration-tip').textContent = details.hydration;
+        document.getElementById('diet-general-tip').textContent = details.generalTip;
     },
 
     initChart() {

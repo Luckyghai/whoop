@@ -73,6 +73,23 @@
                             <option value="flexibility">Flexibility</option>
                         </select>
                     </div>
+                    <div class="input-group">
+                        <label>Health Condition</label>
+                        <select id="setup-health" class="input-field select-field">
+                            <option value="none">None / General Health</option>
+                            <option value="diabetes">Diabetes Management</option>
+                            <option value="hypertension">Hypertension / Heart Health</option>
+                            <option value="gluten-free">Gluten Sensitivity / Celiac</option>
+                            <option value="high-cholesterol">High Cholesterol</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Dietary Preference</label>
+                        <select id="setup-dietary" class="input-field select-field">
+                            <option value="non-veg">Non-Vegetarian</option>
+                            <option value="veg">Vegetarian</option>
+                        </select>
+                    </div>
                     <button id="btn-finish-setup" class="primary-btn">Start Training</button>
                 </div>
             </div>
@@ -141,11 +158,15 @@
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
+         <!-- Bottom Navigation -->
         <div class="bottom-nav glass-card" id="main-bottom-nav" style="display: none;">
             <div class="nav-item active" data-tab="home" onclick="app.navTo('home')">
                 <span class="material-icons-round">home</span>
                 <span>Home</span>
+            </div>
+            <div class="nav-item" data-tab="diet" onclick="app.navTo('diet')">
+                <span class="material-icons-round">restaurant</span>
+                <span>Diet</span>
             </div>
             <div class="nav-item" data-tab="stats" onclick="app.navTo('stats')">
                 <span class="material-icons-round">bar_chart</span>
@@ -230,6 +251,23 @@
                             <option value="flexibility">Flexibility</option>
                         </select>
                     </div>
+                    <div class="input-group">
+                        <label>Health Condition</label>
+                        <select id="profile-health" class="input-field select-field">
+                            <option value="none">None / General Health</option>
+                            <option value="diabetes">Diabetes Management</option>
+                            <option value="hypertension">Hypertension / Heart Health</option>
+                            <option value="gluten-free">Gluten Sensitivity / Celiac</option>
+                            <option value="high-cholesterol">High Cholesterol</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Dietary Preference</label>
+                        <select id="profile-dietary" class="input-field select-field">
+                            <option value="non-veg">Non-Vegetarian</option>
+                            <option value="veg">Vegetarian</option>
+                        </select>
+                    </div>
                     <button id="btn-save-profile" class="primary-btn" style="margin-bottom: 24px;">Save Changes</button>
 
                     <div class="section-header" style="margin-top: 16px;">
@@ -244,6 +282,132 @@
                             <input type="checkbox" id="theme-toggle">
                             <span class="slider round"></span>
                         </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diet & Nutrition Screen -->
+        <div id="screen-diet" class="screen">
+            <div class="header">
+                <h2>Diet & Nutrition</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            
+            <div class="dashboard-content">
+                <!-- User Active Health Summary Badge -->
+                <div class="glass-card diet-profile-summary">
+                    <span class="material-icons-round diet-badge-icon">spa</span>
+                    <div class="diet-badge-text">
+                        <span id="diet-active-condition">Diabetes Management</span>
+                        <p id="diet-active-goal">Goal: Weight Loss</p>
+                    </div>
+                </div>
+
+                <!-- Section 1: Overview & Strategy -->
+                <div class="section-header">
+                    <h3>Nutrition Strategy</h3>
+                </div>
+                <div class="glass-card strategy-card">
+                    <p id="diet-strategy-text">Your plan is tailored to optimize blood sugar control while supporting weight management with low-glycemic, fiber-rich ingredients.</p>
+                </div>
+
+                <!-- Section 2: Meal Plan Guide -->
+                <div class="section-header">
+                    <h3>Sample Daily Meal Plan</h3>
+                </div>
+                <div class="meal-plan-grid">
+                    <!-- Breakfast -->
+                    <div class="glass-card meal-card">
+                        <div class="meal-header">
+                            <span class="material-icons-round">wb_twilight</span>
+                            <h4>Breakfast</h4>
+                        </div>
+                        <p class="meal-desc" id="diet-breakfast-desc">Oatmeal with chia seeds, fresh berries, and almond milk.</p>
+                        <span class="meal-nutrients" id="diet-breakfast-macros">320 kcal • 10g Protein</span>
+                    </div>
+
+                    <!-- Lunch -->
+                    <div class="glass-card meal-card">
+                        <div class="meal-header">
+                            <span class="material-icons-round">light_mode</span>
+                            <h4>Lunch</h4>
+                        </div>
+                        <p class="meal-desc" id="diet-lunch-desc">Grilled chicken breast salad with mixed greens, avocado, and olive oil dressing.</p>
+                        <span class="meal-nutrients" id="diet-lunch-macros">450 kcal • 35g Protein</span>
+                    </div>
+
+                    <!-- Snack -->
+                    <div class="glass-card meal-card">
+                        <div class="meal-header">
+                            <span class="material-icons-round">cookie</span>
+                            <h4>Snack</h4>
+                        </div>
+                        <p class="meal-desc" id="diet-snack-desc">A handful of walnuts and a small apple.</p>
+                        <span class="meal-nutrients" id="diet-snack-macros">180 kcal • 4g Protein</span>
+                    </div>
+
+                    <!-- Dinner -->
+                    <div class="glass-card meal-card">
+                        <div class="meal-header">
+                            <span class="material-icons-round">bedtime</span>
+                            <h4>Dinner</h4>
+                        </div>
+                        <p class="meal-desc" id="diet-dinner-desc">Baked salmon with roasted asparagus and a side of quinoa.</p>
+                        <span class="meal-nutrients" id="diet-dinner-macros">510 kcal • 40g Protein</span>
+                    </div>
+                </div>
+
+                <!-- Section 3: Do's and Don'ts -->
+                <div class="section-header">
+                    <h3>Dietary Guidelines</h3>
+                </div>
+                <div class="guidelines-container">
+                    <div class="glass-card guidelines-box emphasize-box">
+                        <div class="guideline-header green-text">
+                            <span class="material-icons-round">check_circle</span>
+                            <h4>Foods to Emphasize</h4>
+                        </div>
+                        <ul id="diet-emphasize-list" class="guidelines-list">
+                            <li>Leafy greens & non-starchy vegetables</li>
+                            <li>Lean proteins (chicken, fish, tofu)</li>
+                            <li>High fiber complex carbs (quinoa, oats)</li>
+                            <li>Healthy fats (nuts, seeds, olive oil)</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card guidelines-box avoid-box">
+                        <div class="guideline-header red-text">
+                            <span class="material-icons-round">cancel</span>
+                            <h4>Foods to Limit & Avoid</h4>
+                        </div>
+                        <ul id="diet-avoid-list" class="guidelines-list">
+                            <li>Refined sugars & sweetened beverages</li>
+                            <li>White bread, rice & processed pastries</li>
+                            <li>Deep fried & high trans fat foods</li>
+                            <li>Excessive sodium/salt</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 4: Daily Health Tips -->
+                <div class="section-header">
+                    <h3>Lifestyle & Hydration Tips</h3>
+                </div>
+                <div class="glass-card tips-card">
+                    <div class="tip-item">
+                        <span class="material-icons-round tip-icon">water_drop</span>
+                        <div class="tip-content">
+                            <h5>Hydration Target</h5>
+                            <p id="diet-hydration-tip">Drink at least 2.5 - 3 liters of water throughout the day. Hydration stabilizes metabolic rate and keeps cravings in check.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="material-icons-round tip-icon">info</span>
+                        <div class="tip-content">
+                            <h5>Important Guidance</h5>
+                            <p id="diet-general-tip">Monitor portion sizes and eat at consistent timings to maintain steady blood glucose levels throughout the day.</p>
+                        </div>
                     </div>
                 </div>
             </div>
