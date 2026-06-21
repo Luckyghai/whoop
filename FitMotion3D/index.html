@@ -172,6 +172,10 @@
                 <span class="material-icons-round">bar_chart</span>
                 <span>Stats</span>
             </div>
+            <div class="nav-item" data-tab="consult" onclick="app.navTo('consult')">
+                <span class="material-icons-round">medical_services</span>
+                <span>Consult</span>
+            </div>
             <div class="nav-item" data-tab="profile" onclick="app.navTo('profile')">
                 <span class="material-icons-round">person</span>
                 <span>Profile</span>
@@ -413,6 +417,32 @@
             </div>
         </div>
 
+        <!-- Doctor Consultation Screen -->
+        <div id="screen-consult" class="screen">
+            <div class="header">
+                <h2>Doctor Consultation</h2>
+                <div style="width: 40px;"></div>
+            </div>
+
+            <div class="dashboard-content">
+                <!-- Section 1: Upcoming Appointments -->
+                <div class="section-header">
+                    <h3>Upcoming Consultations</h3>
+                </div>
+                <div id="upcoming-consultations-list">
+                    <!-- Dynamic bookings will render here -->
+                </div>
+
+                <!-- Section 2: Available Specialists -->
+                <div class="section-header" style="margin-top: 24px;">
+                    <h3>Available Specialists</h3>
+                </div>
+                <div class="specialists-list" id="specialists-directory">
+                    <!-- Dynamic doctors will render here -->
+                </div>
+            </div>
+        </div>
+
         <!-- 3D Training Room Screen -->
         <div id="screen-training" class="screen">
             <div class="training-header">
@@ -473,6 +503,68 @@
                     </button>
                     <button class="secondary-btn icon-only" id="btn-next-exercise"><span class="material-icons-round">skip_next</span></button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Booking Modal -->
+        <div id="booking-modal" class="modal-overlay" style="display: none;">
+            <div class="glass-card modal-container">
+                <div class="modal-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                    <h3 style="margin: 0;">Schedule Consultation</h3>
+                    <button class="icon-btn" id="btn-close-booking"><span class="material-icons-round">close</span></button>
+                </div>
+                
+                <form id="booking-form" class="setup-form">
+                    <input type="hidden" id="booking-doctor-id">
+                    
+                    <div class="input-group">
+                        <label>Specialist</label>
+                        <input type="text" id="booking-doctor-name" class="input-field" disabled>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Appointment Date</label>
+                        <input type="date" id="booking-date" class="input-field" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Available Time Slot</label>
+                        <div class="time-slots-container">
+                            <label class="slot-pill">
+                                <input type="radio" name="booking-slot" value="09:00 AM - 09:30 AM" checked>
+                                <span>09:00 AM</span>
+                            </label>
+                            <label class="slot-pill">
+                                <input type="radio" name="booking-slot" value="11:30 AM - 12:00 PM">
+                                <span>11:30 AM</span>
+                            </label>
+                            <label class="slot-pill">
+                                <input type="radio" name="booking-slot" value="02:30 PM - 03:00 PM">
+                                <span>02:30 PM</span>
+                            </label>
+                            <label class="slot-pill">
+                                <input type="radio" name="booking-slot" value="04:30 PM - 05:00 PM">
+                                <span>04:30 PM</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Consultation Medium</label>
+                        <select id="booking-medium" class="input-field select-field">
+                            <option value="video">Video Call (Recommended)</option>
+                            <option value="audio">Voice Call</option>
+                            <option value="chat">Text Chat Session</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Symptoms / Special Notes</label>
+                        <textarea id="booking-notes" placeholder="e.g. Muscle stiffness after squats, cardio pacing guidance..." class="input-field" style="height: 80px; resize: none; font-family: inherit;"></textarea>
+                    </div>
+
+                    <button type="submit" id="btn-confirm-booking" class="primary-btn">Confirm Booking</button>
+                </form>
             </div>
         </div>
 

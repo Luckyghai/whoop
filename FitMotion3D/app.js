@@ -14,7 +14,8 @@ const app = {
             activeTimer: null,
             timeRemaining: 0,
             isPlaying: false
-        }
+        },
+        consultations: []
     },
 
     workouts: [
@@ -234,6 +235,49 @@ const app = {
         }
     },
 
+    doctors: [
+        {
+            id: 'dr-sarah',
+            name: 'Dr. Sarah Jenkins',
+            specialty: 'Sports Cardiologist',
+            rating: '4.9',
+            experience: '12 Years',
+            bio: 'Expert in sports cardiology, cardiovascular endurance, and athletic performance diagnostics.',
+            availability: 'Mon, Wed, Fri (09:00 AM - 05:00 PM)',
+            avatar: 'doctor_1'
+        },
+        {
+            id: 'dr-amit',
+            name: 'Dr. Amit Patel',
+            specialty: 'Sports Medicine Specialist',
+            rating: '4.8',
+            experience: '9 Years',
+            bio: 'Specializes in injury recovery, muscle strains, joint mobility, and rehabilitation.',
+            availability: 'Tue, Thu (10:00 AM - 04:00 PM)',
+            avatar: 'doctor_2'
+        },
+        {
+            id: 'dr-elena',
+            name: 'Dr. Elena Rostova',
+            specialty: 'Dietitian & Clinical Nutritionist',
+            rating: '4.9',
+            experience: '10 Years',
+            bio: 'Specializes in metabolic health, ketogenic plans, diabetic diets, and performance nutrition.',
+            availability: 'Mon, Tue, Thu (08:00 AM - 03:00 PM)',
+            avatar: 'doctor_3'
+        },
+        {
+            id: 'dr-marcus',
+            name: 'Dr. Marcus Vance',
+            specialty: 'Physical Therapist',
+            rating: '4.7',
+            experience: '8 Years',
+            bio: 'Focuses on posture adjustment, core strengthening, spine alignment, and mobility therapy.',
+            availability: 'Wed, Fri (11:00 AM - 06:00 PM)',
+            avatar: 'doctor_4'
+        }
+    ],
+
     init() {
         this.cacheDOM();
         this.bindEvents();
@@ -249,7 +293,8 @@ const app = {
             training: document.getElementById('screen-training'),
             stats: document.getElementById('screen-stats'),
             profile: document.getElementById('screen-profile'),
-            diet: document.getElementById('screen-diet')
+            diet: document.getElementById('screen-diet'),
+            consult: document.getElementById('screen-consult')
         };
         this.mainBottomNav = document.getElementById('main-bottom-nav');
         
@@ -290,6 +335,19 @@ const app = {
         this.modelViewer = document.getElementById('exercise-model');
         this.videoViewer = document.getElementById('exercise-video');
         this.modelTips = document.getElementById('model-tips');
+
+        // Consultation & Booking Modal
+        this.bookingModal = document.getElementById('booking-modal');
+        this.btnCloseBooking = document.getElementById('btn-close-booking');
+        this.bookingForm = document.getElementById('booking-form');
+        this.bookingDoctorId = document.getElementById('booking-doctor-id');
+        this.bookingDoctorName = document.getElementById('booking-doctor-name');
+        this.bookingDate = document.getElementById('booking-date');
+        this.bookingMedium = document.getElementById('booking-medium');
+        this.bookingNotes = document.getElementById('booking-notes');
+        
+        this.upcomingConsultationsList = document.getElementById('upcoming-consultations-list');
+        this.specialistsDirectory = document.getElementById('specialists-directory');
     },
 
     bindEvents() {
@@ -367,6 +425,48 @@ const app = {
                 this.renderWorkouts(category);
             });
         });
+
+        // Booking Modal Bindings
+        if (this.btnCloseBooking) {
+            this.btnCloseBooking.addEventListener('click', () => this.closeBookingModal());
+        }
+        
+        if (this.bookingModal) {
+            this.bookingModal.addEventListener('click', (e) => {
+                if (e.target === this.bookingModal) {
+                    this.closeBookingModal();
+                }
+            });
+        }
+
+        if (this.bookingForm) {
+            this.bookingForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const doctorId = this.bookingDoctorId.value;
+                const date = this.bookingDate.value;
+                const slot = document.querySelector('input[name="booking-slot"]:checked').value;
+                const medium = this.bookingMedium.value;
+                const notes = this.bookingNotes.value.trim();
+                
+                const newBooking = {
+                    id: 'appt_' + Date.now(),
+                    doctorId,
+                    date,
+                    slot,
+                    medium,
+                    notes
+                };
+                
+                this.state.consultations.push(newBooking);
+                localStorage.setItem('fitmotion_consultations', JSON.stringify(this.state.consultations));
+                
+                this.closeBookingModal();
+                this.updateConsultUI();
+                
+                alert('Your consultation has been successfully booked!');
+            });
+        }
     },
 
     checkAuth() {
@@ -395,7 +495,7 @@ const app = {
         }
         
         // Show/hide bottom nav based on screen
-        if (['home', 'diet', 'stats', 'profile'].includes(screenName)) {
+        if (['home', 'diet', 'consult', 'stats', 'profile'].includes(screenName)) {
             if(this.mainBottomNav) this.mainBottomNav.style.display = 'flex';
         } else {
             if(this.mainBottomNav) this.mainBottomNav.style.display = 'none';
@@ -422,6 +522,9 @@ const app = {
         this.switchScreen(tab);
         if (tab === 'diet') {
             this.updateDietUI();
+        }
+        if (tab === 'consult') {
+            this.updateConsultUI();
         }
         if (tab === 'stats') {
             this.initChart();
@@ -703,6 +806,169 @@ const app = {
 
         document.getElementById('diet-hydration-tip').textContent = details.hydration;
         document.getElementById('diet-general-tip').textContent = details.generalTip;
+    },
+
+    updateConsultUI() {
+        if (this.specialistsDirectory) {
+            this.specialistsDirectory.innerHTML = '';
+            
+            this.doctors.forEach(doc => {
+                const docCard = document.createElement('div');
+                docCard.className = 'workout-item glass-card specialist-card';
+                docCard.style.display = 'flex';
+                docCard.style.flexDirection = 'column';
+                docCard.style.alignItems = 'stretch';
+                docCard.style.padding = '20px';
+                docCard.style.gap = '12px';
+                docCard.style.cursor = 'default';
+                docCard.style.transform = 'none';
+                
+                docCard.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="profile-avatar" style="width: 56px; height: 56px; border-radius: 18px; flex-shrink: 0;">
+                            <span class="material-icons-round" style="font-size: 2rem;">health_and_safety</span>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-main);">${doc.name}</h4>
+                            <p style="margin: 2px 0 0; font-size: 0.85rem; color: var(--primary); font-weight: 500;">${doc.specialty}</p>
+                            <div style="display: flex; align-items: center; gap: 4px; margin-top: 4px;">
+                                <span class="material-icons-round" style="font-size: 1rem; color: #FFCC00;">star</span>
+                                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-main);">${doc.rating}</span>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">(${doc.experience})</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted); margin: 0;">${doc.bio}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; gap: 8px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 4px; color: var(--text-muted); font-size: 0.8rem;">
+                            <span class="material-icons-round" style="font-size: 1rem;">event</span>
+                            <span>${doc.availability}</span>
+                        </div>
+                        <button class="primary-btn book-btn" style="padding: 10px 16px; border-radius: 12px; font-size: 0.85rem; width: auto; font-weight: 600; box-shadow: none; margin: 0;" onclick="app.openBookingModal('${doc.id}')">Book Consultation</button>
+                    </div>
+                `;
+                
+                this.specialistsDirectory.appendChild(docCard);
+            });
+        }
+
+        if (this.upcomingConsultationsList) {
+            this.upcomingConsultationsList.innerHTML = '';
+            
+            if (this.state.consultations.length === 0) {
+                this.upcomingConsultationsList.innerHTML = `
+                    <div class="glass-card" style="text-align: center; padding: 32px 16px; color: var(--text-muted);">
+                        <span class="material-icons-round" style="font-size: 3rem; margin-bottom: 8px; color: var(--text-muted); opacity: 0.5;">event_busy</span>
+                        <p style="font-size: 0.95rem; margin: 0;">No consultations booked yet.</p>
+                        <p style="font-size: 0.85rem; margin: 4px 0 0;">Select a specialist below to schedule a telehealth session.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            this.state.consultations.forEach(appt => {
+                const doc = this.doctors.find(d => d.id === appt.doctorId);
+                if (!doc) return;
+
+                const apptCard = document.createElement('div');
+                apptCard.className = 'glass-card appointment-card';
+                apptCard.style.padding = '20px';
+                apptCard.style.marginBottom = '16px';
+                apptCard.style.border = '1px solid rgba(0, 122, 255, 0.2)';
+
+                const mediumLabels = {
+                    video: 'Video Consultation',
+                    audio: 'Voice Consultation',
+                    chat: 'Text Chat Session'
+                };
+
+                const mediumIcons = {
+                    video: 'videocam',
+                    audio: 'call',
+                    chat: 'chat'
+                };
+
+                apptCard.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                        <span class="meal-nutrients" style="background: rgba(0, 122, 255, 0.1); color: var(--primary); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; align-self: flex-start;">
+                            <span class="material-icons-round" style="font-size: 0.9rem;">${mediumIcons[appt.medium]}</span>
+                            <span>${mediumLabels[appt.medium]}</span>
+                        </span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Scheduled</span>
+                    </div>
+                    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
+                        <div class="profile-avatar" style="width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;">
+                            <span class="material-icons-round" style="font-size: 1.8rem;">person</span>
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem; color: var(--text-main);">${doc.name}</h4>
+                            <p style="margin: 2px 0 0; font-size: 0.8rem; color: var(--text-muted);">${doc.specialty}</p>
+                        </div>
+                    </div>
+                    <div class="appt-details-box" style="border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-main);">
+                            <span class="material-icons-round" style="font-size: 1.1rem; color: var(--primary);">calendar_today</span>
+                            <strong>Date:</strong> <span>${appt.date}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-main);">
+                            <span class="material-icons-round" style="font-size: 1.1rem; color: var(--primary);">schedule</span>
+                            <strong>Time:</strong> <span>${appt.slot}</span>
+                        </div>
+                        ${appt.notes ? `
+                        <div style="display: flex; align-items: flex-start; gap: 6px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px; margin-top: 4px;">
+                            <span class="material-icons-round" style="font-size: 1rem;">description</span>
+                            <span>"${appt.notes}"</span>
+                        </div>` : ''}
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="primary-btn join-btn" style="flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; box-shadow: none;" onclick="app.startConsultation('${appt.id}')">Join Session</button>
+                        <button class="secondary-btn" style="flex: 1; padding: 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; border-color: rgba(255, 59, 48, 0.3); color: var(--danger); background: transparent;" onclick="app.cancelConsultation('${appt.id}')">Cancel</button>
+                    </div>
+                `;
+
+                this.upcomingConsultationsList.appendChild(apptCard);
+            });
+        }
+    },
+
+    openBookingModal(docId) {
+        const doc = this.doctors.find(d => d.id === docId);
+        if (!doc) return;
+        
+        if (this.bookingDoctorId) this.bookingDoctorId.value = doc.id;
+        if (this.bookingDoctorName) this.bookingDoctorName.value = doc.name;
+        
+        if (this.bookingDate) {
+            const today = new Date().toISOString().split('T')[0];
+            this.bookingDate.value = today;
+            this.bookingDate.min = today;
+        }
+        
+        if (this.bookingNotes) this.bookingNotes.value = '';
+        
+        if (this.bookingModal) {
+            this.bookingModal.style.display = 'flex';
+        }
+    },
+
+    closeBookingModal() {
+        if (this.bookingModal) {
+            this.bookingModal.style.display = 'none';
+        }
+    },
+
+    cancelConsultation(apptId) {
+        if (confirm('Are you sure you want to cancel this consultation?')) {
+            this.state.consultations = this.state.consultations.filter(c => c.id !== apptId);
+            localStorage.setItem('fitmotion_consultations', JSON.stringify(this.state.consultations));
+            this.updateConsultUI();
+        }
+    },
+
+    startConsultation(apptId) {
+        const appt = this.state.consultations.find(c => c.id === apptId);
+        const doc = this.doctors.find(d => d.id === appt.doctorId);
+        alert(`Connecting you to ${doc.name} for your ${appt.medium === 'video' ? 'Video Call' : appt.medium === 'audio' ? 'Voice Call' : 'Chat Session'}...\n\n(This is a mock telehealth connection demo.)`);
     },
 
     initChart() {
