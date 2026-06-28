@@ -74,6 +74,76 @@ const app = {
             modelSrc: null,
             videoSrc: 'assets/videos/mayurasana.mov',
             animationName: null
+        },
+        {
+            id: 'abs-workout-1',
+            name: 'Core Crunch & Abs',
+            title: 'Core Workout',
+            categories: ['HIIT', 'Weight Loss'],
+            target: 'Abdominals, Core',
+            sets: '3',
+            reps: '15',
+            time: 45,
+            icon: 'sports_gymnastics',
+            modelSrc: null,
+            videoSrc: 'assets/videos/abs_workout_1.mp4',
+            animationName: null
+        },
+        {
+            id: 'abs-workout-2',
+            name: 'Six-Pack Shred',
+            title: 'Core Workout',
+            categories: ['HIIT', 'Muscle Gain'],
+            target: 'Lower Abs, Obliques',
+            sets: '4',
+            reps: '12',
+            time: 30,
+            icon: 'sports_gymnastics',
+            modelSrc: null,
+            videoSrc: 'assets/videos/abs_workout_2.mp4',
+            animationName: null
+        },
+        {
+            id: 'triceps-workout',
+            name: 'Triceps Extension',
+            title: 'Arm Day',
+            categories: ['Muscle Gain'],
+            target: 'Triceps',
+            sets: '4',
+            reps: '12',
+            time: 45,
+            icon: 'fitness_center',
+            modelSrc: null,
+            videoSrc: 'assets/videos/triceps_workout.mp4',
+            animationName: null
+        },
+        {
+            id: 'legs-workout',
+            name: 'Leg Press & Squat',
+            title: 'Leg Day',
+            categories: ['Muscle Gain', 'Weight Loss'],
+            target: 'Quads, Hamstrings',
+            sets: '4',
+            reps: '10',
+            time: 60,
+            icon: 'fitness_center',
+            modelSrc: null,
+            videoSrc: 'assets/videos/legs_workout.mp4',
+            animationName: null
+        },
+        {
+            id: 'shoulders-workout',
+            name: 'Shoulder Overhead Press',
+            title: 'Shoulder Day',
+            categories: ['Muscle Gain'],
+            target: 'Deltoids',
+            sets: '3',
+            reps: '12',
+            time: 45,
+            icon: 'fitness_center',
+            modelSrc: null,
+            videoSrc: 'assets/videos/shoulders_workout.mp4',
+            animationName: null
         }
     ],
 
@@ -577,8 +647,11 @@ const app = {
             if(this.modelTips) this.modelTips.style.display = 'none';
             if(this.videoViewer) {
                 this.videoViewer.src = workout.videoSrc;
+                this.videoViewer.load(); // Force browser to load the new video stream
                 this.videoViewer.style.display = 'block';
-                this.videoViewer.play();
+                this.videoViewer.play().catch(err => {
+                    console.warn("Autoplay prevented or interrupted: ", err);
+                });
             }
         } else {
             if(this.videoViewer) this.videoViewer.style.display = 'none';
