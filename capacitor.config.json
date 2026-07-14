@@ -1,0 +1,8 @@
+{
+  "appId": "com.whoop.fitmotion3d",
+  "appName": "FitMotion3D",
+  "webDir": "FitMotion3D",
+  "server": {
+    "androidScheme": "https"
+  }
+}
