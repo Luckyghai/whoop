@@ -647,6 +647,7 @@ const app = {
             if(this.modelTips) this.modelTips.style.display = 'none';
             if(this.videoViewer) {
                 this.videoViewer.src = workout.videoSrc;
+                this.videoViewer.muted = true; // Programmatically force muted to avoid any audio issues
                 this.videoViewer.load(); // Force browser to load the new video stream
                 this.videoViewer.style.display = 'block';
                 this.videoViewer.play().catch(err => {
